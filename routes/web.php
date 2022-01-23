@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\{User, Prefence, Preference};
+use App\Models\{Course, User, Preference, Lesson, Module};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -41,4 +41,36 @@ Route::get('/one-to-one', function(){
 
     $user->refresh();
     dd($user->preference()->get());
+});
+
+Route::get('/one-to-many', function(){
+    //$course  =Course::create(['name' => 'Curso de Laravel']);
+    $course = Course::with('modules.lessons')->first();
+
+    echo $course->name;
+    echo '<br/>';
+    foreach ($course->modules as $module) {
+        echo $module->name;
+        echo '<br/>';
+        foreach ($module->lessons as $lesson) {
+            if ($lesson->name != null) {
+                echo $lesson->name;
+            } else {
+                echo 'Nenhuma aula cadastrada';
+            }
+
+        }
+    }
+
+    dd($course);
+
+    $data = [
+        'name' => 'Modulo X2'
+    ];
+    $course->modules()->create($data);
+
+    $modules= $course->modules;
+
+
+    dd($modules);
 });

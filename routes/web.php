@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\{Course, User, Preference, Lesson, Module};
+use App\Models\{Course, User, Preference, Lesson, Module, Permission};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -73,4 +73,29 @@ Route::get('/one-to-many', function(){
 
 
     dd($modules);
+});
+
+Route::get('/many-to-many', function(){
+    //$permission = Permission::create(['name' => 'menu 04']);
+    //$permission = Permission::all();
+    //dd($permission);
+    $user = User::with('permissions')->find(3);
+
+    //$permission = Permission::find(2);
+    //$user->permissions()->save($permission);
+
+  /* $user->permissions()->saveMany([
+        Permission::find(4),
+        Permission::find(5),
+        Permission::find(7),
+    ]);*/
+
+    //$user->permissions()->sync([2]);
+
+    //$user->permissions()->attach([1]); //adiciona registro
+    $user->permissions()->detach([4]); //deleta registro
+
+    $user->refresh();
+
+    dd($user->permissions);
 });
